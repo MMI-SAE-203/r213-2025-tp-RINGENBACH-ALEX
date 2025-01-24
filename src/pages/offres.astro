@@ -1,5 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
+import Card from "../components/Card.astro";
+import type { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS } from "astro:actions";
 const offres = [
     {
         adresse: "2821 Lake Sevilla, Palm Harbor, TX",
@@ -41,16 +43,18 @@ const offres = [
     <h1>Offres</h1>
     <!-- ou "Offres" pour la page des offres -->
     <p>bienvenue sur ma page pour mes offres</p>
-    <div>
-        <ul>
-            {offres.map((item) => <li>{item.adresse}</li>
-            <li>{item.favori}</li>
-            <li>{item.id}</li>
-            <li>{item.nbChambres}</li>
-            <li>{item.nbSdb}</li>
-            <li>{item.prix}</li>
-            <li>{item.surface}</li>
-            <li>{item.imgUrl}</li>)}
-        </ul>
+    <p>Voici mes offres de Maison :</p>
+    <div class="columns-3" x-data="{ showFavorites: false }">
+        <button @click="showFavorites=!showFavorites">
+            <span x-show="showFavorites">Afficher les favoris</span>
+            <span x-show="!showFavorites">Afficher tout</span>
+        </button>
+
+        <div x-show="showFavorites">
+            {offres.map((offre) => <Card {...offre} />)}
+        </div>
+        <div x-show="!showFavorites">
+            {offres.map((offre) => offre.favori && <Card {...offre} />)}
+        </div>
     </div>
 </Base>
