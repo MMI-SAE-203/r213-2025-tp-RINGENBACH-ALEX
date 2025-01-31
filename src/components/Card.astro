@@ -9,4 +9,9 @@ const offre = Astro.props;
 <li>Nombres de salle de bain :{offre.nbSdb}</li>
 <li>Prix (€) : {offre.prix}</li>
 <li>Surface (m²) : {offre.surface}</li>
-<li>Image de la maison : {offre.imgUrl}</li>
+<li>
+    Image de la maison : <img
+        src={offre.image_maison_url}
+        alt={offre.nom_maison}
+    />
+</li>
