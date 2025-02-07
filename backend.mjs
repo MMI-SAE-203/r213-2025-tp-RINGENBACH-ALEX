@@ -20,3 +20,13 @@ export async function getOffres() {
         return [];
     }
 }
+export async function getOffre(id) {
+    try {
+        let data = await db.collection('Maison').getOne(id);
+        data.imageUrl = db.files.getURL(data, data.image);
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant la maison', error);
+        return null;
+    }
+}
