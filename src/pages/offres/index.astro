@@ -1,8 +1,8 @@
 ---
-import Base from "../layouts/Base.astro";
-import Card from "../components/Card.astro";
+import Base from "../../layouts/Base.astro";
+import Card from "../../components/Card.astro";
 import type { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS } from "astro:actions";
-import { getOffres } from "../../backend.mjs";
+import { getOffres } from "../../../backend.mjs";
 const offres = await getOffres();
 console.log(offres);
 ---
