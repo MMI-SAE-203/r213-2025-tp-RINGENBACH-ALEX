@@ -30,3 +30,15 @@ export async function getOffre(id) {
         return null;
     }
 }
+export async function bySurface(surface) {
+    let data = await db.collection('Maison').getFullList({
+        filter: `surface > ${surface}`
+    });
+
+    data = data.map((maison) => {
+        maison.image_maison_url = db.files.getURL(maison, maison.image_maison);
+        return maison;
+    });
+
+    return data;
+}

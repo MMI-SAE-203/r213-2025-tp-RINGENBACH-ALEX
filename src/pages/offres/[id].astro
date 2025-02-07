@@ -6,10 +6,10 @@ export const prerender = false;
 const offre = await getOffre(id);
 ---
 
-<Base titre={offre.nomMaison}>
-    <h2>{offre.nomMaison}</h2>
+<Base titre={offre?.nom_Maison}>
+    <h2>{offre?.nom_Maison}</h2>
     <ul>
-        <li>{offre.adresse}</li>
+        <li>{offre?.adresse}</li>
         ...
     </ul>
 </Base>
