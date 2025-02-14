@@ -1,4 +1,6 @@
 /*Alex RINGENBACH*/
+
+
 import PocketBase from 'pocketbase';
 
 const db = new PocketBase('http://127.0.0.1:8090');
@@ -11,6 +13,7 @@ export async function getOffres() {
 
         data = data.map((maison) => {
             maison.image_maison_url = db.files.getURL(maison, maison.image_maison);
+            maison.favori = maison.favori || false;
             return maison;
         });
 
@@ -20,6 +23,7 @@ export async function getOffres() {
         return [];
     }
 }
+
 export async function getOffre(id) {
     try {
         let data = await db.collection('Maison').getOne(id);
@@ -41,4 +45,19 @@ export async function bySurface(surface) {
     });
 
     return data;
+}
+export async function addOffre(house) {
+    try {
+        await db.collection('Maison').create(house);
+        return {
+            success: true,
+            message: 'Offre ajoutée avec succès'
+        };
+    } catch (error) {
+        console.log('Une erreur est survenue en ajoutant la maison', error);
+        return {
+            success: false,
+            message: 'Une erreur est survenue en ajoutant la maison'
+        };
+    }
 }
