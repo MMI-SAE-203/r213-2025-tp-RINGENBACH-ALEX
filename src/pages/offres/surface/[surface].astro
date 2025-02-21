@@ -2,7 +2,7 @@
 import Base from "../../../layouts/Base.astro";
 import Card from "../../../components/Card.astro";
 import type { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS } from "astro:actions";
-import { bySurface } from "../../../../backend.mjs";
+import { bySurface } from "../../../../pocketbase_0.24.3_windows_amd64/backend.mjs";
 
 const { surface } = Astro.params;
 export const prerender = false;

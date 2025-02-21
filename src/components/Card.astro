@@ -1,14 +1,39 @@
 ---
 const offre = Astro.props;
+import favorite from "../../public/favorite.svg";
+import favorite_filled from "../../public/favorite_filled.svg";
 ---
 
-<div>
-    <li>nom maison : {offre.nom_maison}</li>
-    <li>
-        Image de la maison : <img
+<div
+    class="card bg-white rounded-2xl shadow-lg p-4 hover:shadow-2xl transition duration-300 border border-blue-200"
+>
+    <li class="font-semibold text-blue-700">{offre.nom_maison}</li>
+    <li class="my-2">
+        <img
             src={offre.image_maison_url}
             alt={offre.nom_maison}
+            class="w-full h-48 object-cover rounded-xl border border-blue-300"
         />
     </li>
-    <a href={`/offres/${offre.id}`}>Voir plus</a>
+    <a
+        href={`/offres/${offre.id}`}
+        class="block text-center bg-blue-500 text-white py-2 px-4 rounded-lg mt-2 hover:bg-blue-600"
+    >
+        Voir plus
+    </a>
+    <div
+        x-data="{ favori: false, clickFavori() { this.favori = !this.favori; alert(this.favori ? 'Ajouté aux favoris !' : 'Retiré des favoris.'); } }"
+        class="relative mt-2"
+    >
+        <button
+            class="absolute bottom-2 left-2 bg-blue-100 p-2 rounded-full hover:bg-blue-200"
+            @click="clickFavori"
+        >
+            <img
+                :src="favori ? '/favorite_filled.svg' : '/favorite.svg'"
+                alt="Favorite Icon"
+                class="w-6 h-6"
+            />
+        </button>
+    </div>
 </div>

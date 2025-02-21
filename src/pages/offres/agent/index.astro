@@ -1,0 +1,21 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { allArtists } from "../../../../pocketbase_0.24.3_windows_amd64/backend.mjs";
+
+const artists = await allArtists();
+---
+
+<Base title="Artists">
+    <h1 class="text-6xl">Artistes</h1>
+    <ul class="mt-4">
+        {
+            artists?.map((agent) => (
+                <li>
+                    <a href={`/agents/${agent.id}`}>
+                        {agent.nom} {agent.prenom}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</Base>

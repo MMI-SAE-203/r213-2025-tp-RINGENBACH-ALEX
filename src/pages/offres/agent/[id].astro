@@ -1,0 +1,24 @@
+---
+import Layout from "../../../layouts/Base.astro";
+import { allEventsByAgent } from "../../../../pocketbase_0.24.3_windows_amd64/backend.mjs";
+import Carousel from "../../../components/Carousel.astro";
+
+const { id } = Astro.params;
+const eventsByAgent = await allEventsByAgent(id);
+if (!eventsByAgent) {
+    console.error(`L'id ${id} n'a pas d'événement attribué`);
+    return Astro.redirect("/Agents");
+}
+const AgentName = "";
+eventsByAgent[0].expand?.agent.nom +
+    " " +
+    eventsByAgent[0].expand?.agent.prenom;
+console.log(eventsByAgent);
+---
+
+<Layout title="Agent">
+    <h1 class="text-6xl">Events by {AgentName}</h1>
+    <div>
+        <Carousel events={eventsByAgent} />
+    </div>
+</Layout>

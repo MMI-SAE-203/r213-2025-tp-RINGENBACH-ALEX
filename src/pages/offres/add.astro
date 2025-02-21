@@ -1,5 +1,7 @@
 ---
-import { addOffre } from "../../../backend.mjs";
+import Base from "../../layouts/Base.astro";
+import { addOffre } from "../../../pocketbase_0.24.3_windows_amd64/backend.mjs";
+export const prerender = false;
 
 let message = "";
 if (Astro.request.method === "POST") {
@@ -9,20 +11,157 @@ if (Astro.request.method === "POST") {
 }
 ---
 
-<a href="/offres/">Offres</a>
-<h1 class="text-lg">Ajouter une offre</h1>
-<form action="/offres/add" method="POST" enctype="multipart/form-data">
-    <input
-        type="text"
-        name="nomMaison"
-        placeholder="Nom de la maison"
-        required
-        class="w-full mt-2 p-2 border border-gray-300 rounded-md"
-    />
-    <input type="number" name="prix" placeholder="Prix" />
-    <input type="number" name="nb_SdB" placeholder="Nombre de salles de bain" />
-    <input type="number" name="nb_chambres" placeholder="Nombre de chambres" />
-    <input type="number" name="surface" placeholder="Superficie" />
-    <input type="file" name="image_maison" />
-    <button type="submit">Ajouter</button>
-</form>
+<Base titre="Ajouter une offre">
+    <div
+        class="container mx-auto px-4 py-12 bg-blue-50 min-h-screen rounded-lg shadow-inner"
+    >
+        <a
+            href="/offres/"
+            class="text-blue-600 hover:text-blue-800 transition mb-4 inline-block"
+        >
+            ← Retour aux offres
+        </a>
+
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-4">
+            Ajouter une offre
+        </h1>
+        <p class="text-center text-gray-600 mb-8">
+            Remplissez le formulaire ci-dessous pour ajouter une nouvelle
+            maison.
+        </p>
+
+        <form
+            action="/offres/add"
+            method="POST"
+            enctype="multipart/form-data"
+            class="space-y-6 max-w-2xl mx-auto bg-white p-10 rounded-2xl shadow-lg border border-blue-200"
+        >
+            <!-- Nom de la maison -->
+            <div>
+                <label
+                    for="nom_maison"
+                    class="block text-lg font-medium text-gray-700"
+                    >Nom de la maison</label
+                >
+                <input
+                    type="text"
+                    name="nom_maison"
+                    placeholder="Ex: Villa du Soleil"
+                    required
+                    class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
+            <!-- Adresse -->
+            <div>
+                <label
+                    for="adresse"
+                    class="block text-lg font-medium text-gray-700"
+                    >Adresse de la maison</label
+                >
+                <input
+                    type="text"
+                    name="adresse"
+                    placeholder="123 rue des Lilas, Paris"
+                    required
+                    class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
+            <!-- Prix -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label
+                        for="prix"
+                        class="block text-lg font-medium text-gray-700"
+                        >Prix (€)</label
+                    >
+                    <input
+                        type="number"
+                        name="prix"
+                        placeholder="500000"
+                        class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+
+                <!-- Superficie -->
+                <div>
+                    <label
+                        for="surface"
+                        class="block text-lg font-medium text-gray-700"
+                        >Superficie (m²)</label
+                    >
+                    <input
+                        type="number"
+                        name="surface"
+                        placeholder="150"
+                        class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+            </div>
+
+            <!-- Nombre de salles de bain et chambres -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label
+                        for="nb_SdB"
+                        class="block text-lg font-medium text-gray-700"
+                        >Salles de bain</label
+                    >
+                    <input
+                        type="number"
+                        name="nb_SdB"
+                        placeholder="2"
+                        class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="nb_chambre"
+                        class="block text-lg font-medium text-gray-700"
+                        >Chambres</label
+                    >
+                    <input
+                        type="number"
+                        name="nb_chambre"
+                        placeholder="4"
+                        class="w-full p-3 mt-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+            </div>
+
+            <!-- Image de la maison -->
+            <div>
+                <label
+                    for="image_maison"
+                    class="block text-lg font-medium text-gray-700"
+                    >Image de la maison</label
+                >
+                <input
+                    type="file"
+                    name="image_maison"
+                    class="w-full p-3 mt-2 border border-blue-300 rounded-lg bg-blue-50 focus:outline-none"
+                />
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button
+                type="submit"
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md"
+            >
+                ➕ Ajouter l'offre
+            </button>
+        </form>
+
+        <!-- Message de confirmation -->
+        {
+            message && (
+                <div class="mt-6 text-center">
+                    <p class="text-green-600 text-lg font-semibold">
+                        ✅ {message}
+                    </p>
+                </div>
+            )
+        }
+    </div>
+</Base>

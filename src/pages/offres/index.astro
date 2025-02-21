@@ -1,57 +1,64 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Card from "../../components/Card.astro";
-import type { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS } from "astro:actions";
-import { getOffres } from "../../../backend.mjs";
-const offres = await getOffres();
-console.log(offres);
+import {
+    filterByPrix,
+    getOffres,
+} from "../../../pocketbase_0.24.3_windows_amd64/backend.mjs";
+
 let message = "";
+let offres = [];
 if (Astro.request.method === "POST") {
     const data = await Astro.request.formData();
-    const minPrix = parseInt(data.get("minPrix"));
-    const maxPrix = parseInt(data.get("maxPrix"));
-
-    if (minPrix > 0 && maxPrix > 0 && maxPrix > minPrix) {
-        Offres = await filterByPrix(minPrix, maxPrix);
-        if (Offres.length === 0) {
-            message = `Pas d'offres entre ${minPrix}€ et ${maxPrix}€`;
-        } else {
-            message = `Liste des offres entre ${minPrix}€ et ${maxPrix}€`;
-        }
-    } else {
-        message = "Veuillez entrer des valeurs valides pour le prix.";
-    }
+    const minPrix = parseInt(data.get("minPrix") as string);
+    const maxPrix = parseInt(data.get("maxPrix") as string);
+    offres =
+        minPrix > 0 && maxPrix > 0 && maxPrix > minPrix
+            ? await filterByPrix(minPrix, maxPrix)
+            : await getOffres();
+    message = offres.length
+        ? `Offres entre ${minPrix}€ et ${maxPrix}€`
+        : "Aucune offre trouvée.";
 } else {
-    Offres = await getOffres();
+    offres = await getOffres();
 }
 ---
 
 <Base titre="Accueil">
-    <h1>Offres</h1>
-    <!-- ou "Offres" pour la page des offres -->
-    <p>bienvenue sur ma page pour mes offres</p>
-    <p>Voici mes offres de Maison :</p>
-    <a href="/offres/add">Ajouter une offre</a>
-    <div x-data="{ open: false }">
-        <button x-on:click="open = ! open">Liste </button>
+    <h1 class="text-3xl font-bold text-blue-600 mb-4">Offres</h1>
+    <p class="text-gray-600">
+        Bienvenue sur ma page pour mes offres de maisons.
+    </p>
+    <a
+        href="/offres/add"
+        class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600"
+    >
+        Ajouter une offre
+    </a>
 
-        <div :class="open ? 'list' : 'hidden'">Card</div>
-    </div>
-    <div class="columns-7" x-data="{ showFavorites: false }">
-        <button @click="showFavorites=!showFavorites">
-            <span x-show="showFavorites">Afficher tout</span>
-            <span x-show="!showFavorites">Afficher les favori</span>
-        </button>
-        <form action="/offres" method="POST">
-            <input type="number" name="minPrix" placeholder="Prix minimum" />
-            <input type="number" name="maxPrix" placeholder="Prix maximum" />
-            <input type="submit" value="Filtrer par prix" />
-        </form>
-        <div x-show="!showFavorites">
-            {offres.map((offre) => <Card {...offre} />)}
-        </div>
-        <div x-show="showFavorites">
-            {offres.map((offre) => offre.favori && <Card {...offre} />)}
-        </div>
+    <form action="/offres" method="POST" class="flex space-x-2 mt-6">
+        <input
+            type="number"
+            name="minPrix"
+            placeholder="Prix minimum"
+            class="border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+            type="number"
+            name="maxPrix"
+            placeholder="Prix maximum"
+            class="border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+            type="submit"
+            value="Filtrer par prix"
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        />
+    </form>
+
+    <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8"
+    >
+        {offres.map((offre) => <Card {...offre} />)}
     </div>
 </Base>
